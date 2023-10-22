@@ -36,6 +36,18 @@ async def add_favorites(id):
     return jsonify(local_title)
 
 
+@app.route('/favorites', methods=['GET'])
+@app.route('/favorites/<string:title>', methods=['GET'])
+async def list_titles(title=None):
+    local_storage = Storage("./storage.json")
+    if title:
+        favorite = await local_storage.get(title)
+        if not favorite:
+            return jsonify({"message": "Title not found"})
+        return jsonify({"message": favorite})
+    favorites = await local_storage.find_all()
+    return jsonify({"message": favorites})
+
 
 
 

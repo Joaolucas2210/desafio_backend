@@ -1,0 +1,13 @@
+[default]
+API_KEY="@format {env [DYNACONF_API_KEY]}
+URL="@format {env [DYNACONF_URL]}
+
+
+[develop]
+API_KEY="@format {env [DYNACONF_API_KEY]}
+URL="@format {env [DYNACONF_URL]}
+
+
+[production]
+API_KEY="@format {env [DYNACONF_API_KEY]}
+URL="@format {env [DYNACONF_URL]}

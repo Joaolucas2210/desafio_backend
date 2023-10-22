@@ -10,7 +10,9 @@ class Storage:
             json.dump(data, f)
 
     async def insert(self, data):
-        print(data)
+        exists = await self.get(data["imdbID"])
+        if exists:
+            return False
         insert_data = {
             "imdbID": data["imdbID"],
             "Title": data["Title"],
@@ -29,6 +31,9 @@ class Storage:
         return True
 
     async def update(self, id, key, value):
+        exists = await self.get(id)
+        if not exists:
+            return False
         storage= await self.load()
         for item in storage["data"]:
             if item["imdbID"] == id:
@@ -36,10 +41,13 @@ class Storage:
         await self.save(storage)
 
     async def get(self, id):
-        storage= await self.load()
-        for item in storage["data"]:
-            if item["imdbID"] == id:
-                return item
+        try:
+            storage= await self.load()
+            for item in storage["data"]:
+                if item["imdbID"] == id:
+                    return item
+        except Exception as e:
+            return None
 
 
     async def load(self):

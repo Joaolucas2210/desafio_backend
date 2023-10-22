@@ -3,6 +3,7 @@ from src.utils.env_config import EnvConfig
 from src.infra.storage.storage import Storage
 from src.adapters.http.http import AsyncHttpClient
 from quart import Quart,request,jsonify
+from termcolor import cprint
 
 app = Quart(__name__)
 
@@ -26,9 +27,11 @@ async def get_title():
 @app.route('/title/<string:id>', methods=['GET'])
 async def add_favorites(id):
     request_storage = Storage("./requestStorage.json")
-    local_storage = Storage("./storage.json")
+    local_storage = Storage("./local_storage.json")
 
     request_title = await request_storage.get(id)
+    if request_title == None:
+        return jsonify("Bad Request"), 400
     is_okay= await local_storage.insert(request_title)
     if not is_okay:
         return jsonify({"message":"Title already exists"})
@@ -39,11 +42,11 @@ async def add_favorites(id):
 @app.route('/favorites', methods=['GET'])
 @app.route('/favorites/<string:title>', methods=['GET'])
 async def list_titles(title=None):
-    local_storage = Storage("./storage.json")
+    local_storage = Storage("./local_storage.json")
     if title:
         favorite = await local_storage.get(title)
         if not favorite:
-            return jsonify({"message": "Title not found"})
+            return jsonify({"message": "Title not found"}), 404
         return jsonify({"message": favorite})
     favorites = await local_storage.find_all()
     return jsonify({"message": favorites})

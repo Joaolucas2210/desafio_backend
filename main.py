@@ -16,8 +16,8 @@ async def get_title():
     api_key = EnvConfig.get('API_KEY')
     request_url = f"{url}?apikey={api_key}&t={title_name}"
     response = await httpClient.get(request_url)
-    print(response.json())
     request_storage = Storage("./requestStorage.json")
+    
     is_okay = await request_storage.insert(response.json())
     if not is_okay:
         return jsonify({"message":"Title already exists"})

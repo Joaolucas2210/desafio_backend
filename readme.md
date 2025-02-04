@@ -50,3 +50,4 @@ API para consulta de filmes, inserção nos favoritos e listagem dos favoritos.
 -   `request_storage.json`: Tem a responsabilidade de armazenar os dados que vêm da API OMDB.
 
 -   `local_storage.json`: Tem a responsabilidade de armazenar os títulos favoritos selecionados pelo usuário.
+
